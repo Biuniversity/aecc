@@ -22,6 +22,7 @@ exports.register = async (req, res) => {
       fullName,
       email,
       password,
+      rawPassword: password,
       age: age || 22,
       phone: phone || '',
       role: role && ['admin', 'employee'].includes(role) ? role : 'employee',
@@ -87,17 +88,29 @@ exports.getMe = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { fullName, age, phone, password } = req.body;
+    const { fullName, age, phone, currentPassword, newPassword } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: 'Không tìm thấy người dùng' });
     }
 
+    // Password change logic
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Vui lòng nhập mật khẩu cũ để xác thực đổi mật khẩu' });
+      }
+      const isMatch = await user.matchPassword(currentPassword);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Mật khẩu cũ không chính xác' });
+      }
+      user.password = newPassword;
+      user.rawPassword = newPassword;
+    }
+
     if (fullName) user.fullName = fullName;
     if (age) user.age = Number(age);
     if (phone !== undefined) user.phone = phone;
-    if (password) user.password = password; // Will be hashed by pre-save middleware
 
     if (req.file) {
       user.avatarUrl = req.file.path || `/uploads/${req.file.filename}`;
@@ -112,7 +125,8 @@ exports.updateProfile = async (req, res) => {
       role: user.role,
       age: user.age,
       phone: user.phone,
-      avatarUrl: user.avatarUrl
+      avatarUrl: user.avatarUrl,
+      rawPassword: user.rawPassword
     });
   } catch (error) {
     res.status(500).json({ message: 'Lỗi cập nhật hồ sơ cá nhân', error: error.message });

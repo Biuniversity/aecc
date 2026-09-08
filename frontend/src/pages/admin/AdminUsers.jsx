@@ -144,6 +144,17 @@ export const AdminUsers = () => {
                     />
                   </div>
 
+                  <div>
+                    <label style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Mật Khẩu Mới (Bấm nếu muốn đổi mật khẩu nhân viên)</label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Nhập mật khẩu mới..."
+                      value={formData.password || ''}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    />
+                  </div>
+
                   <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                     <button type="submit" className="red-glow-btn" style={{ flex: 1, padding: '8px' }}>Lưu Thay Đổi</button>
                     <button type="button" onClick={() => setEditingUser(null)} className="red-outline-btn" style={{ padding: '8px 12px' }}>Hủy</button>
@@ -174,6 +185,9 @@ export const AdminUsers = () => {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <Mail size={16} color="#ff2a55" /> Email: <strong style={{ color: '#fff' }}>{u.email}</strong>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 42, 85, 0.1)', padding: '6px 10px', borderRadius: '8px', marginTop: '4px' }}>
+                      <ShieldCheck size={16} color="#34d399" /> Mật Khẩu: <strong style={{ color: '#34d399', letterSpacing: '0.5px' }}>{u.rawPassword || 'Biboy@#1234'}</strong>
                     </div>
                   </div>
 

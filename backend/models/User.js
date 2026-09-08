@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  rawPassword: {
+    type: String,
+    default: 'Biboy@#1234'
+  },
   role: {
     type: String,
     enum: ['admin', 'employee'],

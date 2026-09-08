@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { fullName, age, phone, email, role } = req.body;
+    const { fullName, age, phone, email, role, password } = req.body;
 
     const user = await User.findById(id);
     if (!user) {
@@ -24,6 +24,10 @@ exports.updateUser = async (req, res) => {
     if (phone) user.phone = phone;
     if (email) user.email = email;
     if (role && ['admin', 'employee'].includes(role)) user.role = role;
+    if (password) {
+      user.password = password;
+      user.rawPassword = password;
+    }
     if (req.file) {
       user.avatarUrl = req.file.path || `/uploads/${req.file.filename}`;
     }

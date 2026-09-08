@@ -38,12 +38,17 @@ export const Navbar = () => {
     fullName: '',
     age: 24,
     phone: '',
-    email: ''
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
   });
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
   const [newAvatarFile, setNewAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [updatingProfile, setUpdatingProfile] = useState(false);
   const [profileMsg, setProfileMsg] = useState('');
+  const [profileError, setProfileError] = useState('');
 
   const handleLogout = () => {
     logout();
@@ -56,11 +61,16 @@ export const Navbar = () => {
       fullName: user.fullName || '',
       age: user.age || 24,
       phone: user.phone || '',
-      email: user.email || ''
+      email: user.email || '',
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: ''
     });
+    setShowPasswordSection(false);
     setAvatarPreview(user.avatarUrl || null);
     setNewAvatarFile(null);
     setProfileMsg('');
+    setProfileError('');
     setProfileModalOpen(true);
   };
 
@@ -74,14 +84,33 @@ export const Navbar = () => {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
-    setUpdatingProfile(true);
     setProfileMsg('');
+    setProfileError('');
+
+    if (profileData.newPassword) {
+      if (!profileData.currentPassword) {
+        setProfileError('Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu mới');
+        return;
+      }
+      if (profileData.newPassword !== profileData.confirmNewPassword) {
+        setProfileError('Mật khẩu mới và xác nhận mật khẩu không trùng khớp');
+        return;
+      }
+    }
+
+    setUpdatingProfile(true);
 
     try {
       const formData = new FormData();
       formData.append('fullName', profileData.fullName);
       formData.append('age', profileData.age);
       formData.append('phone', profileData.phone);
+      if (profileData.currentPassword) {
+        formData.append('currentPassword', profileData.currentPassword);
+      }
+      if (profileData.newPassword) {
+        formData.append('newPassword', profileData.newPassword);
+      }
       if (newAvatarFile) {
         formData.append('avatar', newAvatarFile);
       }
@@ -91,12 +120,12 @@ export const Navbar = () => {
       });
 
       setUser(res.data);
-      setProfileMsg('Cập nhật hồ sơ thành công! ✓');
+      setProfileMsg('Cập nhật hồ sơ & mật khẩu thành công! ✓');
       setTimeout(() => {
         setProfileModalOpen(false);
-      }, 1200);
+      }, 1400);
     } catch (err) {
-      alert(err.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin');
+      setProfileError(err.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin');
     } finally {
       setUpdatingProfile(false);
     }
@@ -409,6 +438,12 @@ export const Navbar = () => {
               </div>
             )}
 
+            {profileError && (
+              <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#f87171', padding: '10px', borderRadius: '10px', marginBottom: '16px', fontSize: '0.85rem', textAlign: 'center' }}>
+                {profileError}
+              </div>
+            )}
+
             <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {/* Avatar Photo Edit Preview */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
@@ -507,6 +542,71 @@ export const Navbar = () => {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Password Change Section Toggle */}
+              <div style={{ marginTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '12px' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordSection(!showPasswordSection)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#ff2a55',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: 0
+                  }}
+                >
+                  🔒 {showPasswordSection ? 'Thu gọn đổi mật khẩu' : 'Bấm vào đây nếu muốn ĐỔI MẬT KHẨU'}
+                </button>
+
+                {showPasswordSection && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px', background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '12px', border: '1px solid rgba(225, 29, 72, 0.2)' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: '#d1d5db', marginBottom: '4px', display: 'block' }}>
+                        1. Mật Khẩu Hiện Tại (Bắt buộc để xác thực) *
+                      </label>
+                      <input
+                        type="password"
+                        className="input-field"
+                        placeholder="Nhập mật khẩu hiện tại..."
+                        value={profileData.currentPassword}
+                        onChange={(e) => setProfileData({ ...profileData, currentPassword: e.target.value })}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: '#d1d5db', marginBottom: '4px', display: 'block' }}>
+                        2. Mật Khẩu Mới *
+                      </label>
+                      <input
+                        type="password"
+                        className="input-field"
+                        placeholder="Nhập mật khẩu mới..."
+                        value={profileData.newPassword}
+                        onChange={(e) => setProfileData({ ...profileData, newPassword: e.target.value })}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: '#d1d5db', marginBottom: '4px', display: 'block' }}>
+                        3. Nhập Lại Mật Khẩu Mới *
+                      </label>
+                      <input
+                        type="password"
+                        className="input-field"
+                        placeholder="Nhập lại mật khẩu mới..."
+                        value={profileData.confirmNewPassword}
+                        onChange={(e) => setProfileData({ ...profileData, confirmNewPassword: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
