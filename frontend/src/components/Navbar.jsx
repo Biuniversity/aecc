@@ -404,7 +404,9 @@ export const Navbar = () => {
         }}>
           <div className="glass-card" style={{
             width: '100%',
-            maxWidth: '480px',
+            maxWidth: '500px',
+            maxHeight: '88vh',
+            overflowY: 'auto',
             padding: '28px',
             background: 'linear-gradient(145deg, rgba(20, 18, 25, 0.98) 0%, rgba(10, 10, 14, 0.99) 100%)',
             border: '1px solid rgba(225, 29, 72, 0.4)',
