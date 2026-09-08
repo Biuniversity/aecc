@@ -67,7 +67,8 @@ export const CarouselHero = () => {
     <div style={{
       position: 'relative',
       width: '100%',
-      height: '380px',
+      minHeight: '260px',
+      height: 'clamp(260px, 40vh, 380px)',
       borderRadius: '20px',
       overflow: 'hidden',
       boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
@@ -92,7 +93,7 @@ export const CarouselHero = () => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 48px',
+        padding: '24px 20px',
         maxWidth: '650px'
       }}>
         <div style={{

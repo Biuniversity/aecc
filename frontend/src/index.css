@@ -156,3 +156,48 @@ body {
 .pulse-glow {
   animation: pulseGlow 2.5s infinite ease-in-out;
 }
+
+/* Mobile Responsiveness & Breakpoints */
+@media (max-width: 768px) {
+  .desktop-links {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+
+  /* Compact padding for mobile viewports */
+  body {
+    font-size: 0.95rem;
+  }
+
+  .glass-card {
+    padding: 16px !important;
+    border-radius: 12px;
+  }
+
+  .input-field {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .red-glow-btn, .red-outline-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  /* Stack grid layouts on mobile */
+  .grid-mobile-stack {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.3rem !important;
+  }
+  h3 {
+    font-size: 1.15rem !important;
+  }
+}

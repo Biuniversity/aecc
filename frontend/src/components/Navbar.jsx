@@ -387,6 +387,69 @@ export const Navbar = () => {
             </button>
           </div>
         </div>
+
+        {/* Mobile Sliding Drawer Menu */}
+        {mobileMenuOpen && (
+          <div style={{
+            background: '#111116',
+            borderTop: '1px solid rgba(225, 29, 72, 0.3)',
+            padding: '16px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            marginTop: '12px'
+          }}>
+            {user ? (
+              <>
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', padding: '10px', borderRadius: '8px', background: isActive('/') ? 'rgba(225,29,72,0.2)' : 'transparent' }}>
+                  <Home size={18} color="#ff2a55" /> Trang Chủ
+                </Link>
+
+                <Link to="/attendance/new" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', padding: '10px', borderRadius: '8px', background: isActive('/attendance/new') ? 'rgba(225,29,72,0.2)' : 'transparent' }}>
+                  <Clock size={18} color="#ff2a55" /> Nhập Chấm Công
+                </Link>
+
+                <Link to="/attendance/history" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', padding: '10px', borderRadius: '8px', background: isActive('/attendance/history') ? 'rgba(225,29,72,0.2)' : 'transparent' }}>
+                  <FileText size={18} color="#ff2a55" /> Lịch Sử Chấm Công
+                </Link>
+
+                <Link to="/game" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', padding: '10px', borderRadius: '8px', background: isActive('/game') ? 'rgba(225,29,72,0.2)' : 'transparent' }}>
+                  <Gamepad2 size={18} color="#ff2a55" /> Baccarat 15s
+                </Link>
+
+                {user.role === 'admin' && (
+                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '10px', marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.75rem', color: '#ff4d6d', fontWeight: 800, marginBottom: '8px', textTransform: 'uppercase' }}>Danh Mục Admin:</div>
+                    <Link to="/admin/attendance" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#d1d5db', textDecoration: 'none', padding: '8px 10px' }}>
+                      <FileText size={16} color="#ff2a55" /> Xem Chấm Công Tuần
+                    </Link>
+                    <Link to="/admin/users" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#d1d5db', textDecoration: 'none', padding: '8px 10px' }}>
+                      <Users size={16} color="#ff2a55" /> Quản Lý Nhân Viên
+                    </Link>
+                    <Link to="/admin/kpi" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#d1d5db', textDecoration: 'none', padding: '8px 10px' }}>
+                      <Sliders size={16} color="#ff2a55" /> Quản Lý Bảng Lương KPI
+                    </Link>
+                    <Link to="/admin/posts" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#d1d5db', textDecoration: 'none', padding: '8px 10px' }}>
+                      <Newspaper size={16} color="#ff2a55" /> Quản Lý Bài Đăng / Nội Quy
+                    </Link>
+                    <Link to="/admin/carousel" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#d1d5db', textDecoration: 'none', padding: '8px 10px' }}>
+                      <ImageIcon size={16} color="#ff2a55" /> Quản Lý Banner Carousel
+                    </Link>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none' }}>
+                  <button className="red-outline-btn" style={{ width: '100%' }}>Đăng Nhập</button>
+                </Link>
+                <Link to="/register" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none' }}>
+                  <button className="red-glow-btn" style={{ width: '100%' }}>Đăng Ký</button>
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* USER PROFILE VIEW / EDIT POPUP MODAL */}
