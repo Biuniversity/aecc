@@ -53,12 +53,51 @@ export const AttendanceSubmit = () => {
     calculateLive();
   }, [odyleCount, abyssPoints, bossHours]);
 
+  // Clipboard Ctrl+V Paste Handler for instant screenshot pasting
+  useEffect(() => {
+    const handlePaste = (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            setProofImage(file);
+            setPreviewUrl(URL.createObjectURL(file));
+            setError('');
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, []);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProofImage(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        setProofImage(file);
+        setPreviewUrl(URL.createObjectURL(file));
+        setError('');
+      }
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
   };
 
   const handleSubmit = async (e) => {
@@ -238,28 +277,37 @@ export const AttendanceSubmit = () => {
               <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#d1d5db', marginBottom: '6px' }}>
                 4. Hình Ảnh Chứng Minh (Ảnh chụp màn hình) *
               </label>
-              <div style={{
-                border: '2px dashed rgba(225, 29, 72, 0.4)',
-                borderRadius: '12px',
-                padding: '20px',
-                textAlign: 'center',
-                background: '#0a0a0d',
-                cursor: 'pointer',
-                transition: 'all 0.3s'
-              }}>
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                style={{
+                  border: '2px dashed rgba(225, 29, 72, 0.4)',
+                  borderRadius: '12px',
+                  padding: '24px 16px',
+                  textAlign: 'center',
+                  background: '#0a0a0d',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }}
+              >
                 {previewUrl ? (
                   <div>
                     <img
                       src={previewUrl}
                       alt="Proof Preview"
-                      style={{ maxWidth: '100%', maxHeight: '180px', borderRadius: '8px', objectFit: 'contain', marginBottom: '10px' }}
+                      style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain', marginBottom: '10px' }}
                     />
-                    <div style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 600 }}>✓ Đã tải ảnh chứng minh</div>
+                    <div style={{ fontSize: '0.85rem', color: '#34d399', fontWeight: 700 }}>✓ Đã nhận ảnh chứng minh! (Bấm chọn ảnh khác hoặc Ctrl + V để đổi)</div>
                   </div>
                 ) : (
                   <label style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                     <Upload size={32} color="#ff2a55" />
-                    <span style={{ fontSize: '0.9rem', color: '#d1d5db' }}>Bấm vào đây để chọn hình ảnh minh chứng</span>
+                    <span style={{ fontSize: '0.95rem', color: '#ffffff', fontWeight: 700 }}>
+                      📋 Nhấn <span style={{ color: '#ff2a55' }}>Ctrl + V</span> để Dán Ảnh trực tiếp từ Clipboard
+                    </span>
+                    <span style={{ fontSize: '0.85rem', color: '#d1d5db' }}>
+                      hoặc Bấm vào đây để chọn tệp / Kéo thả ảnh vào đây
+                    </span>
                     <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Hỗ trợ JPG, PNG, WEBP (Tối đa 5MB)</span>
                     <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                   </label>
