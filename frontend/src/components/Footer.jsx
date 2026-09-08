@@ -26,14 +26,14 @@ export const Footer = () => {
         </div>
 
         <p style={{ maxWidth: '600px', color: '#6b7280', lineHeight: 1.6 }}>
-          Hệ Thống Quản Lý Chấm Công Nhân Viên Tự Động dựa trên chỉ số KPI (Odyle, Abyss, Boss). 
-          Tự động dọn dẹp phiếu chấm công 2 tuần & Bảo mật cao cấp với JWT Authentication.
+          Hệ Thống Quản Lý Chấm Công  cho ngầu dựa trên chỉ số KPI (Odyle, Abyss, Boss).
+
         </p>
 
         {/* Social Icons: Facebook, Discord, Youtube */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/rongtrangmatxanhh/"
             target="_blank"
             rel="noopener noreferrer"
             title="Facebook"

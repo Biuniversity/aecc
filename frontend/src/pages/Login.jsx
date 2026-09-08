@@ -120,7 +120,7 @@ export const Login = () => {
             className="red-glow-btn"
             style={{ width: '100%', marginTop: '10px', padding: '14px', fontSize: '1rem' }}
           >
-            {loading ? 'Đang xác thực...' : 'ĐĂNG NHẬP XÁC THỰC'}
+            {loading ? 'Đang xác thực...' : 'ĐĂNG NHẬP'}
           </button>
         </form>
 
